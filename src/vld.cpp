@@ -973,8 +973,13 @@ LPWSTR VisualLeakDetector::buildSymbolSearchPath ()
     }
 
 #if _MSC_VER > 1900
-#error Not supported VS
+    WCHAR symbolCacheDir[MAX_PATH] = { 0 };
+    GetTempPath(MAX_PATH, symbolCacheDir);
+
+    path = AppendString(path, symbolCacheDir);
+    path = AppendString(path, L"\\SymbolCache;");        
 #endif
+
     // Append Visual Studio 2015/2013/2012/2010/2008 symbols cache directory.
     for (UINT n = 9; n <= 14; ++n) {
         WCHAR debuggerpath[MAX_PATH] = { 0 };
